@@ -14,6 +14,7 @@ import ch.wiss.wiss_quiz.model.Category;
 import ch.wiss.wiss_quiz.model.CategoryRepository;
 import ch.wiss.wiss_quiz.model.Question;
 import ch.wiss.wiss_quiz.model.QuestionRepository;
+import ch.wiss.wiss_quiz.service.QuizService;
 
 @RestController
 @RequestMapping(path = "/quiz")
@@ -22,6 +23,8 @@ public class QuizController {
   @Autowired
   private QuestionRepository questionRepository;
   @Autowired
+  private QuizService quizService;
+  @Autowired
   private CategoryRepository categoryRepository;
 
   @GetMapping(path = "")
@@ -29,10 +32,6 @@ public class QuizController {
 
     Optional<Category> cat = categoryRepository.findById(cat_id);
     List<Question> questions = questionRepository.findByCategory(cat.get());
-    if (questions.size() > MAX_QUESTIONS) {
-      Collections.shuffle(questions);
-      return questions.subList(0, MAX_QUESTIONS);
-    }
-    return questions;
+    return quizService.pickQuizQuestions(questions, MAX_QUESTIONS);
   }
 }
