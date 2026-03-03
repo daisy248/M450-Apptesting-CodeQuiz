@@ -7,6 +7,11 @@ services:
       MYSQL_ROOT_PASSWORD: schnappie
     networks:
       - mynet123
+    healthcheck:
+      test: ["CMD", "mysqladmin", "ping", "-h", "localhost", "-pschnappie"]
+      interval: 5s
+      timeout: 3s
+      retries: 30
 
   api:
     container_name: wissquiz_api
@@ -18,10 +23,11 @@ services:
       MYSQL_HOST: wissquiz_db
       ENV_VAR: OK
     depends_on:
-      - db
+      db:
+        condition: service_healthy
     networks:
       - mynet123
-
+        
 networks:
   mynet123:
     name: mynet123
