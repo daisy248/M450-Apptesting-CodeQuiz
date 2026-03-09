@@ -25,4 +25,17 @@ public class QuizService {
 
         return copy;
     }
+    
+  public boolean hasEnoughQuestions(List<Question> questions) {
+	    return questions != null && questions.size() >= 3;
+	}
+  
+  public double calculateScorePercent(int correct, int total) {
+	    if (total <= 0) return 0;
+	    return (correct * 100.0) / total;
+	}
+  
+  public boolean calculateScorePercent(double percent) {
+	    return percent >= 60;
+	}
 }

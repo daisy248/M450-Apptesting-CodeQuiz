@@ -30,8 +30,13 @@ public class QuizController {
   @GetMapping(path = "")
   public List<Question> getQuizQuestions(@RequestParam Integer cat_id) {
 
-    Optional<Category> cat = categoryRepository.findById(cat_id);
-    List<Question> questions = questionRepository.findByCategory(cat.get());
-    return quizService.pickQuizQuestions(questions, MAX_QUESTIONS);
-  }
+	    Category cat = categoryRepository.findById(cat_id).orElseThrow();
+	    List<Question> questions = questionRepository.findByCategory(cat);
+
+	    if (!quizService.hasEnoughQuestions(questions)) {
+	        throw new IllegalStateException("Not enough questions for quiz");
+	    }
+
+	    return quizService.pickQuizQuestions(questions, MAX_QUESTIONS);
+	}
 }
