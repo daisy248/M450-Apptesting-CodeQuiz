@@ -5,8 +5,8 @@ services:
       context: ./backend/src/main/resources/Database
     environment:
       MYSQL_ROOT_PASSWORD: schnappie
-    ports:
-      - "3306:3306"
+    volumes:
+      - wissquiz_db_data:/var/lib/mysql
     networks:
       - mynet123
     healthcheck:
@@ -32,7 +32,26 @@ services:
     networks:
       - mynet123
 
+  frontend:
+    container_name: wissquiz_frontend
+    build:
+      context: ./frontend
+      args:
+        REACT_APP_API_URL: http://localhost:8080
+    ports:
+      - "80:80"
+    depends_on:
+      api:
+        condition: service_started
+    restart: unless-stopped
+    networks:
+      - mynet123
+
 networks:
   mynet123:
     name: mynet123
     driver: bridge
+
+volumes:
+  wissquiz_db_data:
+    name: wissquiz_db_data

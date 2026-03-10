@@ -2,14 +2,15 @@
 # see https://dzone.com/articles/how-to-dockerize-reactjs-app
 
 # Step 1
-FROM node:12-alpine as build-step
+FROM node:18-alpine AS build-step
 
-RUN mkdir /app
 WORKDIR /app
-COPY package.json /app
+ARG REACT_APP_API_URL=http://localhost:8080
+ENV REACT_APP_API_URL=$REACT_APP_API_URL
+COPY package.json package-lock.json ./
 
-RUN npm install
-COPY . /app
+RUN npm ci
+COPY . .
 
 RUN npm run build
 

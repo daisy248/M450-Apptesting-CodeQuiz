@@ -1,4 +1,5 @@
 import React from "react"
+import API_BASE_URL from "./api";
 
 class QuestionList extends React.Component {
 
@@ -10,7 +11,7 @@ class QuestionList extends React.Component {
     }
 
     componentDidMount() {
-        fetch(process.env.REACT_APP_API_URL+"/question/")
+        fetch(API_BASE_URL + "/question/")
                 .then(response => response.json())
                 .then(data => this.setState({questions: data}))
                 .catch(err => {console.log(err)})

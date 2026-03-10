@@ -1,6 +1,7 @@
 import React from "react"
 import './GameSession.css';
 import Question from "./Question.js"
+import API_BASE_URL from "./api";
 
 /**
 * handles a set of Questions
@@ -21,7 +22,7 @@ class GameSession extends React.Component{
 
     componentDidMount(){
       if(this.state.questions.length === 0){
-        fetch(process.env.REACT_APP_API_URL+"/quiz?cat_id=1")
+        fetch(API_BASE_URL + "/quiz?cat_id=1")
           .then(response => response.json())
           .then(data => this.setState({questions: data}))
           .catch(err => {console.log(err)})
